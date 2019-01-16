@@ -12,6 +12,7 @@ package org.junit.platform.console.tasks;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.concurrent.ArrayBlockingQueue;
@@ -26,6 +27,16 @@ class TreeNodeTests {
 
 	private static final int NUM_THREADS = 2;
 	private static final int ITEMS_PER_THREAD = 1000;
+
+	@Test
+	void caption() {
+		assertEquals("", TreeNode.createCaption(""));
+		assertEquals("@", TreeNode.createCaption("@"));
+		assertEquals("@.", TreeNode.createCaption("@\t"));
+		assertEquals("@..", TreeNode.createCaption("@\t\n"));
+		assertEquals("@...", TreeNode.createCaption("@\t\n\r"));
+		assertEquals("@".repeat(80) + "...", TreeNode.createCaption("@".repeat(1000)));
+	}
 
 	@Test
 	void childrenCanBeAddedConcurrently() throws Exception {
